@@ -9,35 +9,55 @@ class Tile extends StatefulWidget {
 
   @override
   State<Tile> createState() => _TileState();
-
 }
 
 class _TileState extends State<Tile> {
-
-  void makeImage(){
+  void makeImage() {
     print("making image...");
     widget.onFinish(widget.task);
+    switchImage();
+  }
+
+  bool imageTaken = false;
+
+  void switchImage(){
+    setState(() {
+      imageTaken = true;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double oszto = 4.7;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Container(
+    return FittedBox(
+        fit: BoxFit.cover,
+        child: Container(
           width: screenWidth / oszto,
           height: screenWidth / oszto,
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(15)),
+          decoration: BoxDecoration(
+            //color: Theme.of(context).colorScheme.primary,
+            //borderRadius: BorderRadius.all(Radius.circular(15)),
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
+          child: imageTaken ? Image(
+            image: NetworkImage("https://media.istockphoto.com/id/1091697372/es/foto/aeropuerto-selfie.jpg?s=1024x1024&w=is&k=20&c=pZVEBEceHUDcNOr7O0ztD6ukPPmY5ssXyyxgSWMgXaI="),
+            fit: BoxFit.cover,
+            ) :
+          //not taken the img
+          Padding(
+            padding: const EdgeInsets.all(5.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(widget.task),
-                ElevatedButton(onPressed: makeImage, child: Text("Finish"))
+Text(widget.task, style: TextStyle(
+                    fontSize: screenWidth / (oszto*9)
+                  ), softWrap: true,),
+                Container(
+                  height: 30,
+                    child: ElevatedButton(
+                  onPressed: makeImage,
+                  child: Icon(Icons.camera_alt_outlined)
+                ))
               ],
             ),
           ),

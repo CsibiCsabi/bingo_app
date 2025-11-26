@@ -6,7 +6,7 @@ void main() {
 }
 
 var kColorScheme = ColorScheme.fromSeed(
-  seedColor: const Color.fromARGB(255, 194, 146, 3),
+  seedColor: const Color.fromARGB(255, 28, 8, 160),
   );
 
 class MainApp extends StatelessWidget {
@@ -15,11 +15,13 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData().copyWith(
         colorScheme: kColorScheme,
         
       ),
       home: Scaffold(
+        
         body: MainPage()
       )
     );
