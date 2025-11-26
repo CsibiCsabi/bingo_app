@@ -18,10 +18,8 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData().copyWith(
         colorScheme: kColorScheme,
-        
       ),
-      home: Scaffold(
-        
+      home: const Scaffold(
         body: MainPage()
       )
     );
