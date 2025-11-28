@@ -164,10 +164,11 @@ List<Widget> cells = [];
               "FRIEND BINGO",
               style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
             ),
-            ElevatedButton(onPressed: restart, child: Text("RESTART")),
+            
             Expanded(
               child: GridView.count(crossAxisCount: size, children: cells),
-            )
+            ),
+          ElevatedButton(onPressed: restart, child: Text("RESTART"))
           ],
         ),
       ),
