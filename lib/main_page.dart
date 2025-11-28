@@ -110,9 +110,21 @@ class _MainPageState extends State<MainPage> {
 
   void getGrid(int size) {
     cells = [];
+    double round = 14;
     for (int i = 0; i < tasks.length; i++) {
+      if (i == 0){
+        taskTiles[i].setCorner("topLeft");
+      } else if (i == size - 1){
+        taskTiles[i].setCorner("topRight");
+      } else if (i ==tasks.length - size){
+        taskTiles[i].setCorner("bottomLeft");
+      } else if (i == tasks.length-1){
+        taskTiles[i].setCorner("bottomRight");
+
+      }
       cells.add(Container(
         decoration: BoxDecoration(
+          borderRadius:  BorderRadius.only(topLeft: i == 0 ? Radius.circular(round) : Radius.circular(0), topRight: i == size-1 ? Radius.circular(round) : Radius.circular(0), bottomLeft: i == tasks.length - size ? Radius.circular(round) : Radius.circular(0), bottomRight: i == tasks.length-1 ? Radius.circular(round) : Radius.circular(0)),
           border: Border(
               right: BorderSide(
                   color: Colors.black, width: i % size == size - 1 ? 2 : 1),
@@ -175,19 +187,21 @@ class _MainPageState extends State<MainPage> {
               end: AlignmentGeometry.bottomRight)),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Text(
-              "FRIEND BINGO",
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-            ),
-            
-            Expanded(
-              child: GridView.count(crossAxisCount: size, children: cells),
-            ),
-          ElevatedButton(onPressed: restart, child: Text("RESTART")),
-          SizedBox(height: 20),
-          ],
+        child: SafeArea(
+          child: Column(
+            children: [
+              Text(
+                "FRIEND BINGO",
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+              ),
+              
+              Expanded(
+                child: GridView.count(crossAxisCount: size, children: cells),
+              ),
+            ElevatedButton(onPressed: restart, child: Text("RESTART")),
+            SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );

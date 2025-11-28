@@ -6,8 +6,12 @@ class Tile extends StatefulWidget {
   Tile(this.task, this.onFinish, {super.key});
 
   String task;
-
   Function onFinish;
+
+  void setCorner(String corn){
+    corner = corn;
+  }
+  String corner = "none";
 
   bool imageTaken = false;
 
@@ -42,53 +46,64 @@ class _TileState extends State<Tile> {
     double screenWidth = MediaQuery.of(context).size.width;
     double oszto = 4.7;
     double size = screenWidth / oszto;
-    return FittedBox(
-      fit: BoxFit.cover,
-      clipBehavior: Clip.hardEdge,
-      child: Container(
-        
-        width: size,
-        height: size,
-        decoration: BoxDecoration(
-          //color: Theme.of(context).colorScheme.primary,
-          //borderRadius: BorderRadius.all(Radius.circular(15)),
-            ),
-        child: widget.imageTaken
-            ? FittedBox(
-                fit: BoxFit.cover,
-                clipBehavior: Clip.hardEdge,
-                child: Image.file(image!))
-            :
-            //not taken the img
-            Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      widget.task,
-                      style: TextStyle(fontSize: screenWidth / (oszto * 9)),
-                      softWrap: true,
-                    ),
-                    Container(
-                        height: size / 3,
-                        width: size / 2,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: IconButton(
-                          padding: EdgeInsets.zero,
-                          color: Colors.white,
-                          onPressed: makeImage,
-                          icon: Icon(
-                            Icons.camera_alt_outlined,
-                            size: 30,
-                            color: Color.fromRGBO(255, 255, 255, 0.6),
-                            weight: 1,
-                            ))),
-                  ],
-                ),
+    double round = 12;
+    return ClipRRect(
+      borderRadius: BorderRadiusGeometry.only(topLeft: widget.corner == "topLeft" ? Radius.circular(round) : Radius.circular(0), topRight: widget.corner == "topRight" ? Radius.circular(round) : Radius.circular(0), bottomLeft: widget.corner == "bottomLeft" ? Radius.circular(round) : Radius.circular(0), bottomRight: widget.corner == "bottomRight" ? Radius.circular(round) : Radius.circular(0)),
+      child: FittedBox(
+        fit: BoxFit.cover,
+        clipBehavior: Clip.hardEdge,
+        child: Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            //color: Theme.of(context).colorScheme.primary,
+            //borderRadius: BorderRadius.all(Radius.circular(15)),
               ),
+          child: widget.imageTaken
+              ? FittedBox(
+                  fit: BoxFit.cover,
+                  clipBehavior: Clip.hardEdge,
+                  child: Image.file(image!))
+              :
+              //not taken the img
+              Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      overlayColor: Colors.transparent
+                    ),
+                    onPressed: makeImage,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          widget.task,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: screenWidth / (oszto * 8),
+                            color: Colors.black,
+                            
+                            ),
+                          softWrap: true,
+                        ),
+                        Container(
+                            height: size / 3,
+                            width: size / 2,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Icon(
+                                Icons.camera_alt_outlined,
+                                size: 30,
+                                color: Color.fromRGBO(255, 255, 255, 0.6),
+                                weight: 1,
+                                )),
+                      ],
+                    ),
+                  ),
+                ),
+        ),
       ),
     );
   }
