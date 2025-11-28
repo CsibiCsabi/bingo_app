@@ -168,7 +168,8 @@ List<Widget> cells = [];
             Expanded(
               child: GridView.count(crossAxisCount: size, children: cells),
             ),
-          ElevatedButton(onPressed: restart, child: Text("RESTART"))
+          ElevatedButton(onPressed: restart, child: Text("RESTART")),
+          SizedBox(height: 20),
           ],
         ),
       ),
