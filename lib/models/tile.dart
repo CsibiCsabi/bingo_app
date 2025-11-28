@@ -19,17 +19,12 @@ class _TileState extends State<Tile> {
     print("making image...");
     pickImage(ImageSource.camera);
     widget.onFinish(widget.task);
-    switchImage();
   }
 
   
 
 
-  void switchImage(){
-    setState(() {
-      widget.imageTaken = true;
-    });
-  }
+
 
   File? image;
 
@@ -42,10 +37,12 @@ class _TileState extends State<Tile> {
     if (PickedFile != null) {
       setState(() {
         image = File(PickedFile.path);
+        widget.imageTaken = true;
       });
     }
 
   }
+
 
 
   @override
@@ -62,8 +59,12 @@ class _TileState extends State<Tile> {
             //color: Theme.of(context).colorScheme.primary,
             //borderRadius: BorderRadius.all(Radius.circular(15)),
           ),
-          child: image != null ?
-              Image.file(image!) :
+          child: widget.imageTaken ?
+              FittedBox(
+                fit: BoxFit.cover,
+                clipBehavior: Clip.hardEdge,
+                child: Image.file(image!)
+              ) :
           //not taken the img
           Padding(
             padding: const EdgeInsets.all(5.0),
