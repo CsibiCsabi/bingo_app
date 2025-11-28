@@ -181,10 +181,12 @@ class _MainPageState extends State<MainPage> {
               "FRIEND BINGO",
               style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
             ),
-            ElevatedButton(onPressed: restart, child: const Text("RESTART")),
+            
             Expanded(
               child: GridView.count(crossAxisCount: size, children: cells),
-            )
+            ),
+          ElevatedButton(onPressed: restart, child: Text("RESTART")),
+          SizedBox(height: 20),
           ],
         ),
       ),
