@@ -70,25 +70,14 @@ class _MainPageState extends State<MainPage> {
     showBingo();
   }
 
-  List<Widget> getCells(int size) {
+  List<Tile> taskTiles = [];
+
+  void getCells() {
     print("eleg sokszor lefut...");
-    List<Widget> lista = [];
-    for (int i = 0; i < tasks.length; i++)
-      lista.add(Container(
-        decoration: BoxDecoration(
-          border: Border(
-              right: BorderSide(
-                  color: Colors.black, width: i % size == size - 1 ? 2 : 1),
-              bottom: BorderSide(
-                  color: Colors.black,
-                  width: i > tasks.length - size - 1 ? 2 : 1),
-              left:
-                  BorderSide(color: Colors.black, width: i % size == 0 ? 2 : 1),
-              top: BorderSide(color: Colors.black, width: i < size ? 2 : 1)),
-        ),
-        child: Tile(tasks[i], finishTask),
-      ));
-      return lista;
+    taskTiles = [];
+    for (int i = 0; i < tasks.length; i++) {
+      taskTiles.add(Tile(tasks[i], finishTask));
+    }
   }
 
   void showBingo() {
@@ -117,8 +106,28 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
+  List<Widget> cells = [];
 
-List<Widget> cells = [];
+  void getGrid(int size) {
+    cells = [];
+    for (int i = 0; i < tasks.length; i++) {
+      cells.add(Container(
+        decoration: BoxDecoration(
+          border: Border(
+              right: BorderSide(
+                  color: Colors.black, width: i % size == size - 1 ? 2 : 1),
+              bottom: BorderSide(
+                  color: Colors.black,
+                  width: i > tasks.length - size - 1 ? 2 : 1),
+              left:
+                  BorderSide(color: Colors.black, width: i % size == 0 ? 2 : 1),
+              top: BorderSide(color: Colors.black, width: i < size ? 2 : 1)),
+        ),
+        child: taskTiles[i],
+      ));
+    }
+    
+  }
 
   void restart() {
     setState(() {
@@ -137,18 +146,26 @@ List<Widget> cells = [];
         false,
         false
       ];
-    });
-    for (Widget i in cells){
+      for (Widget i in taskTiles) {
       (i as Tile).imageTaken = false;
     }
+    });
+    getCells();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    //int size = MediaQuery.of(context).size.width > 700 ? 4 : 3;
+    getCells();
   }
 
   @override
   Widget build(BuildContext context) {
     int size = MediaQuery.of(context).size.width > 700 ? 4 : 3;
-    cells = getCells(size);
+    getGrid(size);
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           gradient: LinearGradient(
               colors: [
             Color.fromRGBO(255, 109, 51, 1),
@@ -164,7 +181,7 @@ List<Widget> cells = [];
               "FRIEND BINGO",
               style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
             ),
-            ElevatedButton(onPressed: restart, child: Text("RESTART")),
+            ElevatedButton(onPressed: restart, child: const Text("RESTART")),
             Expanded(
               child: GridView.count(crossAxisCount: size, children: cells),
             )
