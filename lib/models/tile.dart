@@ -2,6 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:camera/camera.dart';
+
+late List<CameraDescription> _cameras;
 
 class Tile extends StatefulWidget {
   Tile(this.task, this.onFinish, {super.key});
@@ -22,9 +25,13 @@ class Tile extends StatefulWidget {
 
 class _TileState extends State<Tile> {
   void makeImage() {
-    print("making image...");
+    if (kIsWeb) {
+        webCamera();
+    } else {
+    //print("making image...");
     pickImage(ImageSource.camera);
     widget.onFinish(widget.task);
+    }
   }
 
   File? image;
@@ -47,7 +54,51 @@ class _TileState extends State<Tile> {
       });
     }
   }
+  Uint8List? webImage;
+  CameraController? webController;
 
+  Future<void> webCamera() async {
+  _cameras = await availableCameras();
+  webController = CameraController(_cameras[0], ResolutionPreset.max);
+
+  try {
+    await webController!.initialize();
+    if (!mounted) return;
+
+    // Show live preview in a dialog
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: AspectRatio(
+          aspectRatio: webController!.value.aspectRatio,
+          child: CameraPreview(webController!),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              // Capture image
+              final picture = await webController!.takePicture();
+              webImage = await picture.readAsBytes();
+
+              setState(() {
+                widget.imageTaken = true;
+              });
+
+              Navigator.pop(context); // Close dialog
+            },
+            child: const Text("Capture"),
+          ),
+        ],
+      ),
+    );
+
+  } catch (e) {
+    print("Camera error: $e");
+  } finally {
+    await webController?.dispose();
+    webController = null;
+  }
+}
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
