@@ -1,4 +1,6 @@
+import 'package:bingo_app/models/gradient_text.dart';
 import 'package:bingo_app/models/tile.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class MainPage extends StatefulWidget {
@@ -81,19 +83,21 @@ class _MainPageState extends State<MainPage> {
   }
 
   void showBingo() {
+    double screenWidth = MediaQuery.of(context).size.width;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: Center(child: Text("BINGO!")),
         content: SizedBox(
-          height: 100,
+          height: screenWidth / 4,
+          width: screenWidth / 3,
         ),
         actions: [
           ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
-              child: Text("OK?"))
+              child: const Text("YAY!"))
         ],
         backgroundColor: Color.fromARGB(180, 0, 0, 0),
         titleTextStyle: TextStyle(
@@ -107,38 +111,46 @@ class _MainPageState extends State<MainPage> {
   }
 
   List<Widget> cells = [];
-
+  var borderWidth = 2.5;
+  var borderColor = Colors.black;
   void getGrid(int size) {
     cells = [];
     double round = 14;
     for (int i = 0; i < tasks.length; i++) {
-      if (i == 0){
+      if (i == 0) {
         taskTiles[i].setCorner("topLeft");
-      } else if (i == size - 1){
+      } else if (i == size - 1) {
         taskTiles[i].setCorner("topRight");
-      } else if (i ==tasks.length - size){
+      } else if (i == tasks.length - size) {
         taskTiles[i].setCorner("bottomLeft");
-      } else if (i == tasks.length-1){
+      } else if (i == tasks.length - 1) {
         taskTiles[i].setCorner("bottomRight");
-
       }
       cells.add(Container(
         decoration: BoxDecoration(
-          borderRadius:  BorderRadius.only(topLeft: i == 0 ? Radius.circular(round) : Radius.circular(0), topRight: i == size-1 ? Radius.circular(round) : Radius.circular(0), bottomLeft: i == tasks.length - size ? Radius.circular(round) : Radius.circular(0), bottomRight: i == tasks.length-1 ? Radius.circular(round) : Radius.circular(0)),
+          borderRadius: BorderRadius.only(
+              topLeft: i == 0 ? Radius.circular(round) : Radius.circular(0),
+              topRight:
+                  i == size - 1 ? Radius.circular(round) : Radius.circular(0),
+              bottomLeft: i == tasks.length - size
+                  ? Radius.circular(round)
+                  : Radius.circular(0),
+              bottomRight: i == tasks.length - 1
+                  ? Radius.circular(round)
+                  : Radius.circular(0)),
           border: Border(
               right: BorderSide(
-                  color: Colors.black, width: i % size == size - 1 ? 2 : 1),
+                  color: borderColor, width: i % size == size - 1 ? borderWidth : borderWidth / 2),
               bottom: BorderSide(
-                  color: Colors.black,
-                  width: i > tasks.length - size - 1 ? 2 : 1),
+                  color: borderColor,
+                  width: i > tasks.length - size - 1 ? borderWidth : borderWidth / 2),
               left:
-                  BorderSide(color: Colors.black, width: i % size == 0 ? 2 : 1),
-              top: BorderSide(color: Colors.black, width: i < size ? 2 : 1)),
+                  BorderSide(color: borderColor, width: i % size == 0 ? borderWidth : borderWidth / 2),
+              top: BorderSide(color: borderColor, width: i < size ? borderWidth : borderWidth / 2)),
         ),
         child: taskTiles[i],
       ));
     }
-    
   }
 
   void restart() {
@@ -159,8 +171,8 @@ class _MainPageState extends State<MainPage> {
         false
       ];
       for (Widget i in taskTiles) {
-      (i as Tile).imageTaken = false;
-    }
+        (i as Tile).imageTaken = false;
+      }
     });
     getCells();
   }
@@ -172,6 +184,7 @@ class _MainPageState extends State<MainPage> {
     getCells();
   }
 
+  var boxcolor = Colors.blue;
   @override
   Widget build(BuildContext context) {
     int size = MediaQuery.of(context).size.width > 700 ? 4 : 3;
@@ -190,16 +203,63 @@ class _MainPageState extends State<MainPage> {
         child: SafeArea(
           child: Column(
             children: [
-              Text(
-                "FRIEND BINGO",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+              /*
+              Material(
+                color: Colors.transparent, // Fontos!
+                child: InkWell(
+                  onTap: () {
+                    showBingo();
+                  },
+                  borderRadius: BorderRadius.circular(8),
+                  splashColor: Color.fromARGB(255, 15, 63, 102),
+                  highlightColor: Color.fromARGB(255, 63, 131, 199),
+                  child: Ink(
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 255, 255, 255),
+                      borderRadius:
+                          BorderRadius.circular(8), // Ugyanaz a radius
+                    ),
+                    width: 80,
+                    height: 80,
+                    child: Center(
+                      child: Text('data'),
+                    ),
+                  ),
+                ),
               ),
-              
+              */
+              SizedBox(height: 25,),
               Expanded(
                 child: GridView.count(crossAxisCount: size, children: cells),
               ),
-            ElevatedButton(onPressed: restart, child: Text("RESTART")),
-            SizedBox(height: 20),
+              Material(
+                color: Colors.transparent, // Fontos!
+                child: InkWell(
+                    borderRadius: BorderRadius.circular(14),
+                    onTap: restart,
+                    splashColor: Color.fromRGBO(255, 109, 51, 0.5),
+                    child: Ink(
+                      height: 50,
+                      width: 140,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(14),
+                        color: const Color.fromRGBO(255, 255, 255, 0.2),
+                        border: Border.all(color: const Color.fromARGB(255, 255, 255, 255), width: 2),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          'RESTART',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 17,
+                            letterSpacing: 0.7,
+                            color: Colors.white
+                          ),
+                        ),
+                      ),
+                    )),
+              ),
+              SizedBox(height: 20),
             ],
           ),
         ),

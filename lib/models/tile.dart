@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -30,9 +31,15 @@ class _TileState extends State<Tile> {
 
   final picker = ImagePicker();
 
+  Uint8List? webImage;
+
   Future<void> pickImage(ImageSource source) async {
+
     final PickedFile = await picker.pickImage(source: source);
 
+    if (kIsWeb){
+      webImage = await PickedFile!.readAsBytes();
+    }
     if (PickedFile != null) {
       setState(() {
         image = File(PickedFile.path);
@@ -63,7 +70,7 @@ class _TileState extends State<Tile> {
               ? FittedBox(
                   fit: BoxFit.cover,
                   clipBehavior: Clip.hardEdge,
-                  child: Image.file(image!))
+                  child: kIsWeb ? Image.memory(webImage!) : Image.file(image!))
               :
               //not taken the img
               Padding(
@@ -95,7 +102,7 @@ class _TileState extends State<Tile> {
                             ),
                             child: Icon(
                                 Icons.camera_alt_outlined,
-                                size: 30,
+                                size: size / 5,
                                 color: Color.fromRGBO(255, 255, 255, 0.6),
                                 weight: 1,
                                 )),
