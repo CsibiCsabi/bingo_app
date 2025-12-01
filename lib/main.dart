@@ -7,7 +7,7 @@ void main() {
 
 var kColorScheme = ColorScheme.fromSeed(
   seedColor: const Color.fromARGB(255, 28, 8, 160),
-  );
+);
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
@@ -15,13 +15,26 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData().copyWith(
-        colorScheme: kColorScheme,
-      ),
-      home: const Scaffold(
-        body: MainPage()
-      )
-    );
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData().copyWith(
+          colorScheme: kColorScheme,
+        ),
+        home: Scaffold(
+            appBar: AppBar(
+              elevation: 3,
+              shadowColor: Colors.black,
+              bottom: PreferredSize(preferredSize: const Size.fromHeight(3), child: Container(color: Colors.black, height: 3,)),
+              title: Row(
+                children: [
+                  Icon(Icons.abc),
+                  SizedBox(width: 90),
+                  Text(
+                    'HUMAN BINGO',
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                  )
+                ],
+              ),
+            ),
+            body: MainPage()));
   }
 }
