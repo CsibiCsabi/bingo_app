@@ -24,16 +24,17 @@ class MainApp extends StatelessWidget {
               elevation: 3,
               shadowColor: Colors.black,
               bottom: PreferredSize(preferredSize: const Size.fromHeight(3), child: Container(color: Colors.black, height: 3,)),
-              title: const Row(
-                children: [
-                  Icon(Icons.abc),
-                  SizedBox(width: 90),
-                  Text(
-                    'HUMAN BINGO',
-                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                  )
-                ],
+              centerTitle: true,
+              title: Text(
+                'HUMAN BINGO',
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
               ),
+              leading: new Container(
+                alignment: Alignment.centerLeft,
+                padding: new EdgeInsets.all(8.0),
+                child: Image.asset('assets/course_creators.png'),
+              ),
+              leadingWidth: MediaQuery.of(context).size.width / 3.5,
             ),
             body: MainPage()));
   }
