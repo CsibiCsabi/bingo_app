@@ -68,10 +68,21 @@ class _TileState extends State<Tile> {
       await showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          content: AspectRatio(
+        backgroundColor: Colors.black.withValues(alpha: 0.35),
+        contentPadding: const EdgeInsets.fromLTRB(16, 16, 16, 16), // left, top, right, bottom
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadiusGeometry.circular(24),
+          side: BorderSide(color: Colors.white, width: 3),
+        ),
+        content: Center(
+          child: ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: AspectRatio(
             aspectRatio: webController!.value.aspectRatio,
             child: CameraPreview(webController!),
           ),
+          ),
+        ),
           actions: [
             TextButton(
               onPressed: () async {
