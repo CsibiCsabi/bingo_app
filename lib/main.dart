@@ -24,7 +24,7 @@ class MainApp extends StatelessWidget {
               elevation: 3,
               shadowColor: Colors.black,
               bottom: PreferredSize(preferredSize: const Size.fromHeight(3), child: Container(color: Colors.black, height: 3,)),
-              title: Row(
+              title: const Row(
                 children: [
                   Icon(Icons.abc),
                   SizedBox(width: 90),

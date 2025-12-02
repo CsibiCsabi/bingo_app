@@ -12,9 +12,10 @@ class Tile extends StatefulWidget {
   String task;
   Function onFinish;
 
-  void setCorner(String corn){
+  void setCorner(String corn) {
     corner = corn;
   }
+
   String corner = "none";
 
   bool imageTaken = false;
@@ -26,11 +27,9 @@ class Tile extends StatefulWidget {
 class _TileState extends State<Tile> {
   void makeImage() {
     if (kIsWeb) {
-        webCamera();
+      webCamera();
     } else {
-    //print("making image...");
-    pickImage(ImageSource.camera);
-    widget.onFinish(widget.task);
+      pickImage(ImageSource.camera);
     }
   }
 
@@ -41,64 +40,64 @@ class _TileState extends State<Tile> {
   Uint8List? webImage;
 
   Future<void> pickImage(ImageSource source) async {
-
     final PickedFile = await picker.pickImage(source: source);
 
-    if (kIsWeb){
+    if (kIsWeb) {
       webImage = await PickedFile!.readAsBytes();
     }
     if (PickedFile != null) {
       setState(() {
         image = File(PickedFile.path);
         widget.imageTaken = true;
+        widget.onFinish(widget.task);
       });
     }
   }
-  Uint8List? webImage;
+
   CameraController? webController;
 
   Future<void> webCamera() async {
-  _cameras = await availableCameras();
-  webController = CameraController(_cameras[0], ResolutionPreset.max);
+    _cameras = await availableCameras();
+    webController = CameraController(_cameras[0], ResolutionPreset.max);
 
-  try {
-    await webController!.initialize();
-    if (!mounted) return;
+    try {
+      await webController!.initialize();
+      if (!mounted) return;
 
-    // Show live preview in a dialog
-    await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        content: AspectRatio(
-          aspectRatio: webController!.value.aspectRatio,
-          child: CameraPreview(webController!),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () async {
-              // Capture image
-              final picture = await webController!.takePicture();
-              webImage = await picture.readAsBytes();
-
-              setState(() {
-                widget.imageTaken = true;
-              });
-
-              Navigator.pop(context); // Close dialog
-            },
-            child: const Text("Capture"),
+      // Show live preview in a dialog
+      await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: AspectRatio(
+            aspectRatio: webController!.value.aspectRatio,
+            child: CameraPreview(webController!),
           ),
-        ],
-      ),
-    );
+          actions: [
+            TextButton(
+              onPressed: () async {
+                // Capture image
+                final picture = await webController!.takePicture();
+                webImage = await picture.readAsBytes();
 
-  } catch (e) {
-    print("Camera error: $e");
-  } finally {
-    await webController?.dispose();
-    webController = null;
+                setState(() {
+                  widget.imageTaken = true;
+                });
+
+                Navigator.pop(context); // Close dialog
+              },
+              child: const Text("Capture"),
+            ),
+          ],
+        ),
+      );
+    } catch (e) {
+      print("Camera error: $e");
+    } finally {
+      await webController?.dispose();
+      webController = null;
+    }
   }
-}
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -106,7 +105,19 @@ class _TileState extends State<Tile> {
     double size = screenWidth / oszto;
     double round = 12;
     return ClipRRect(
-      borderRadius: BorderRadiusGeometry.only(topLeft: widget.corner == "topLeft" ? Radius.circular(round) : Radius.circular(0), topRight: widget.corner == "topRight" ? Radius.circular(round) : Radius.circular(0), bottomLeft: widget.corner == "bottomLeft" ? Radius.circular(round) : Radius.circular(0), bottomRight: widget.corner == "bottomRight" ? Radius.circular(round) : Radius.circular(0)),
+      borderRadius: BorderRadiusGeometry.only(
+          topLeft: widget.corner == "topLeft"
+              ? Radius.circular(round)
+              : Radius.circular(0),
+          topRight: widget.corner == "topRight"
+              ? Radius.circular(round)
+              : Radius.circular(0),
+          bottomLeft: widget.corner == "bottomLeft"
+              ? Radius.circular(round)
+              : Radius.circular(0),
+          bottomRight: widget.corner == "bottomRight"
+              ? Radius.circular(round)
+              : Radius.circular(0)),
       child: FittedBox(
         fit: BoxFit.cover,
         clipBehavior: Clip.hardEdge,
@@ -114,23 +125,29 @@ class _TileState extends State<Tile> {
           width: size,
           height: size,
           decoration: BoxDecoration(
-            //color: Theme.of(context).colorScheme.primary,
-            //borderRadius: BorderRadius.all(Radius.circular(15)),
+              //color: Theme.of(context).colorScheme.primary,
+              //borderRadius: BorderRadius.all(Radius.circular(15)),
               ),
           child: widget.imageTaken
               ? FittedBox(
                   fit: BoxFit.cover,
                   clipBehavior: Clip.hardEdge,
-                  child: kIsWeb ? Image.memory(webImage!) : Image.file(image!))
+                  child: TextButton(
+                      style: ButtonStyle(
+                        padding: WidgetStatePropertyAll(EdgeInsets.all(0))
+                      ),
+                      onPressed: makeImage,
+                      child: kIsWeb
+                          ? Image.memory(webImage!)
+                          : Image.file(image!)))
               :
               //not taken the img
               Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                      overlayColor: Colors.transparent
-                    ),
+                        padding: EdgeInsets.zero,
+                        overlayColor: Colors.transparent),
                     onPressed: makeImage,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -141,8 +158,7 @@ class _TileState extends State<Tile> {
                           style: TextStyle(
                             fontSize: screenWidth / (oszto * 8),
                             color: Colors.black,
-                            
-                            ),
+                          ),
                           softWrap: true,
                         ),
                         Container(
@@ -152,11 +168,11 @@ class _TileState extends State<Tile> {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Icon(
-                                Icons.camera_alt_outlined,
-                                size: size / 5,
-                                color: Color.fromRGBO(255, 255, 255, 0.6),
-                                weight: 1,
-                                )),
+                              Icons.camera_alt_outlined,
+                              size: size / 5,
+                              color: Color.fromRGBO(255, 255, 255, 0.6),
+                              weight: 1,
+                            )),
                       ],
                     ),
                   ),

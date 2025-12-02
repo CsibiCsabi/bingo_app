@@ -180,7 +180,6 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
-    //int size = MediaQuery.of(context).size.width > 700 ? 4 : 3;
     getCells();
   }
 
@@ -203,7 +202,6 @@ class _MainPageState extends State<MainPage> {
         child: SafeArea(
           child: Column(
             children: [
-              /*
               Material(
                 color: Colors.transparent, // Fontos!
                 child: InkWell(
@@ -227,7 +225,6 @@ class _MainPageState extends State<MainPage> {
                   ),
                 ),
               ),
-              */
               SizedBox(height: 25,),
               Expanded(
                 child: GridView.count(crossAxisCount: size, children: cells),
