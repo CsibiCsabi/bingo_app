@@ -141,51 +141,54 @@ class _TileState extends State<Tile> {
                             : Image.file(image!)))
                 :
                 //not taken the img
-                Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: makeImage,
-                      splashColor: const Color.fromARGB(50, 255, 255, 255),
-                      child: Ink(
-                        child: widget.imageTaken
-                            ? FittedBox(
-                              fit: BoxFit.cover,
-                              clipBehavior: Clip.hardEdge,
-                              child: kIsWeb
-                                ? Image.memory(webImage!)
-                                : Image.file(image!)
-                            )
-                            : Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    widget.task,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: screenWidth / (oszto * 8),
-                                      color: Colors.black,
-                                    ),
-                                    softWrap: true,
-                                  ),
-                                  Container(
-                                      height: size / 3,
-                                      width: size / 2,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
+                Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: makeImage,
+                        splashColor: const Color.fromARGB(50, 255, 255, 255),
+                        child: Ink(
+                          child: widget.imageTaken
+                              ? FittedBox(
+                                fit: BoxFit.cover,
+                                clipBehavior: Clip.hardEdge,
+                                child: kIsWeb
+                                  ? Image.memory(webImage!)
+                                  : Image.file(image!)
+                              )
+                              : Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      widget.task,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: screenWidth / (oszto * 8),
+                                        color: Colors.black,
                                       ),
-                                      child: Icon(
-                                        Icons.camera_alt_outlined,
-                                        size: size / 5,
-                                        color: const Color.fromRGBO(
-                                            255, 255, 255, 0.6),
-                                        weight: 1,
-                                      )),
-                                ],
-                              ),
+                                      softWrap: true,
+                                    ),
+                                    Container(
+                                        height: size / 3,
+                                        width: size / 2,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        child: Icon(
+                                          Icons.camera_alt_outlined,
+                                          size: size / 5,
+                                          color: const Color.fromRGBO(
+                                              255, 255, 255, 0.6),
+                                          weight: 1,
+                                        )),
+                                  ],
+                                ),
+                        ),
                       ),
                     ),
-                  )
+                )
 
             /*
               Padding(

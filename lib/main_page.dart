@@ -199,139 +199,169 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     int size = MediaQuery.of(context).size.width > 700 ? 4 : 3;
     getGrid(size);
-    return Container(
-      decoration: const BoxDecoration(
-          gradient: LinearGradient(
-              colors: [
-            Color.fromRGBO(255, 109, 51, 1),
-            Color.fromRGBO(77, 86, 245, 1)
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 3,
+        shadowColor: Colors.black,
+        bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(3),
+            child: Container(
+              color: Colors.black,
+              height: 3,
+            )),
+        title: Row(
+          children: [
+            Animate(
+              effects: [FadeEffect(), ScaleEffect()],
+              child: Text(
+                'HUMAN BINGO',
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+              ),
+            )
           ],
-              begin: AlignmentGeometry.centerLeft,
-              end: AlignmentGeometry.bottomRight)),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SafeArea(
-          child: Column(
-            children: [
-              /*Material(
-                color: Colors.transparent, // Fontos!
-                child: InkWell(
-                  onTap: () {
-                    showBingo();
-                  },
-                  borderRadius: BorderRadius.circular(8),
-                  splashColor: const Color.fromARGB(255, 15, 63, 102),
-                  highlightColor: const Color.fromARGB(255, 63, 131, 199),
-                  child: Ink(
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 255, 255, 255),
-                      borderRadius:
-                          BorderRadius.circular(8), // Ugyanaz a radius
-                    ),
-                    width: 80,
-                    height: 80,
-                    child: const Center(
-                      child: Text('data'),
-                    ),
-                  ),
-                ),
-              ),*/
-              const SizedBox(
-                height: 25,
-              ),
-              Expanded(
-                child: GridView.count(crossAxisCount: size, children: [
-                  for (int i = 0; i < cells.length; i++)
-                    Animate(
-                      delay: (i * 120).ms,
-                      effects: [
-                        SlideEffect(begin: Offset(0, 0.5), end: Offset.zero),
-                        FadeEffect()
-                      ],
-                      key: ValueKey('${resetCount}_$i'),
-                      child: cells[i],
-                    )
-                ]),
-              ),
-              Column(
+        ),
+        leading: new Container(
+          alignment: Alignment.centerLeft,
+          padding: new EdgeInsets.all(8.0),
+          child: Image.asset('assets/course_creators.png'),
+        ),
+        leadingWidth: MediaQuery.of(context).size.width / 3.5,
+      ),
+      body: Container(
+        decoration: const BoxDecoration(
+            gradient: LinearGradient(
+                colors: [
+              Color.fromRGBO(255, 109, 51, 1),
+              Color.fromRGBO(77, 86, 245, 1)
+            ],
+                begin: AlignmentGeometry.centerLeft,
+                end: AlignmentGeometry.bottomRight)),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
                 children: [
-                  // RESET gomb
+                  /* DEBUG:showBingo debug inkwell
                   Material(
-                    color: Colors.transparent,
+                    color: Colors.transparent, // Fontos!
                     child: InkWell(
-                      borderRadius: BorderRadius.circular(14),
-                  splashColor: const Color.fromRGBO(255, 109, 51, 0.5),
                       onTap: () {
-                        // 1. Animáció indítása
-                        setState(() {
-                          _resetAnimation = true;
-                          _isResetting = true;
-                        });
-
-                        // 2. Reset logika
-                        restart();
-
-                        // 3. Animáció visszaállítása
-                        Future.delayed(1.seconds, () {
-                          setState(() {
-                            _resetAnimation = false;
-                          _isResetting = false;
-                          });
-                        });
+                        showBingo();
                       },
+                      borderRadius: BorderRadius.circular(8),
+                      splashColor: const Color.fromARGB(255, 15, 63, 102),
+                      highlightColor: const Color.fromARGB(255, 63, 131, 199),
                       child: Ink(
-                        height: 50,
-                        width: 150,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                          color: const Color.fromRGBO(255, 255, 255, 0.2),
-                          border: Border.all(
-                              color: const Color.fromARGB(255, 255, 255, 255),
-                              width: 2),
+                          color: const Color.fromARGB(255, 255, 255, 255),
+                          borderRadius:
+                              BorderRadius.circular(8), // Ugyanaz a radius
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            _isResetting 
-  ? Icon(Icons.refresh, color: Colors.white)
-      .animate()
-      .rotate(duration: 0.9.seconds)
-  : Icon(Icons.refresh, color: Colors.white),
-                            SizedBox(width: 8),
-                            Text(
-                              'RESTART',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 17,
-                                  letterSpacing: 0.7,
-                                  color: Colors.white),
-                            ),
-                          ],
+                        width: 80,
+                        height: 80,
+                        child: const Center(
+                          child: Text('data'),
                         ),
                       ),
                     ),
+                  ),*/
+                  Expanded(
+                    child: GridView.count(crossAxisCount: size, children: [
+                      for (int i = 0; i < cells.length; i++)
+                        Animate(
+                          delay: (i * 120).ms,
+                          effects: [
+                            SlideEffect(begin: Offset(0, 0.5), end: Offset.zero),
+                            FadeEffect()
+                          ],
+                          key: ValueKey('${resetCount}_$i'),
+                          child: cells[i],
+                        )
+                    ]),
                   ),
-
-                  // Animáció amit a gomb indít
-                  Container(
-                    padding: EdgeInsets.all(16),
-                    child: Text(
-                      'New game started!',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  )
-                      .animate(
-                        autoPlay: false,
-                        target: _resetAnimation ? 1 : 0,
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      // RESET gomb
+                      Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(14),
+                          splashColor: const Color.fromRGBO(255, 109, 51, 0.5),
+                          onTap: () {
+                            // 1. Animáció indítása
+                            setState(() {
+                              _resetAnimation = true;
+                              _isResetting = true;
+                            });
+              
+                            // 2. Reset logika
+                            restart();
+              
+                            // 3. Animáció visszaállítása
+                            Future.delayed(1.seconds, () {
+                              setState(() {
+                                _resetAnimation = false;
+                                _isResetting = false;
+                              });
+                            });
+                          },
+                          child: Ink(
+                            height: 50,
+                            width: 150,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(14),
+                              color: const Color.fromRGBO(255, 255, 255, 0.2),
+                              border: Border.all(
+                                  color: const Color.fromARGB(255, 255, 255, 255),
+                                  width: 2),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                _isResetting
+                                    ? Icon(Icons.refresh, color: Colors.white)
+                                        .animate()
+                                        .rotate(duration: 0.5.seconds)
+                                    : Icon(Icons.refresh, color: Colors.white),
+                                SizedBox(width: 8),
+                                Text(
+                                  'RESTART',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 17,
+                                      letterSpacing: 0.7,
+                                      color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      // Animáció amit a gomb indít
+                      Container(
+                        padding: EdgeInsets.all(16),
+                        child: Text(
+                          'Started new game!',
+                          style: TextStyle(fontSize: 18),
+                        ),
                       )
-                      .fadeIn(duration: 300.ms)
-                      .slideY(begin: -0.5)
-                      .then(delay: 500.ms)
-                      .fadeOut(duration: 300.ms),
+                          .animate(
+                            autoPlay: false,
+                            target: _resetAnimation ? 1 : 0,
+                          )
+                          .fadeIn(duration: 300.ms)
+                          .slideY(begin: -0.5)
+                          .then(delay: 500.ms)
+                          .fadeOut(duration: 300.ms),
+                    ],
+                  ),
                 ],
               ),
-              const SizedBox(height: 20),
-            ],
+            ),
           ),
         ),
       ),

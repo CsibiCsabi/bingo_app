@@ -1,8 +1,15 @@
 import 'package:bingo_app/main_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 void main() {
-  runApp(const MainApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((fn){runApp(const MainApp());});
+
+  
 }
 
 var kColorScheme = ColorScheme.fromSeed(
@@ -19,29 +26,6 @@ class MainApp extends StatelessWidget {
         theme: ThemeData().copyWith(
           colorScheme: kColorScheme,
         ),
-        home: Scaffold(
-            appBar: AppBar(
-              elevation: 3,
-              shadowColor: Colors.black,
-              bottom: PreferredSize(preferredSize: const Size.fromHeight(3), child: Container(color: Colors.black, height: 3,)),
-              title: Row(
-                children: [
-                  Animate(
-                    effects: [FadeEffect(), ScaleEffect()],
-                    child: Text(
-                      'HUMAN BINGO',
-                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                    ),
-                  )
-                ],
-              ),
-              leading: new Container(
-                alignment: Alignment.centerLeft,
-                padding: new EdgeInsets.all(8.0),
-                child: Image.asset('assets/course_creators.png'),
-              ),
-              leadingWidth: MediaQuery.of(context).size.width / 3.5,
-            ),
-            body: const MainPage()));
+        home: MainPage());
   }
 }
