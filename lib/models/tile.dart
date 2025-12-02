@@ -108,40 +108,86 @@ class _TileState extends State<Tile> {
       borderRadius: BorderRadiusGeometry.only(
           topLeft: widget.corner == "topLeft"
               ? Radius.circular(round)
-              : Radius.circular(0),
+              : const Radius.circular(0),
           topRight: widget.corner == "topRight"
               ? Radius.circular(round)
-              : Radius.circular(0),
+              : const Radius.circular(0),
           bottomLeft: widget.corner == "bottomLeft"
               ? Radius.circular(round)
-              : Radius.circular(0),
+              : const Radius.circular(0),
           bottomRight: widget.corner == "bottomRight"
               ? Radius.circular(round)
-              : Radius.circular(0)),
+              : const Radius.circular(0)),
       child: FittedBox(
         fit: BoxFit.cover,
         clipBehavior: Clip.hardEdge,
         child: Container(
-          width: size,
-          height: size,
-          decoration: BoxDecoration(
-              //color: Theme.of(context).colorScheme.primary,
-              //borderRadius: BorderRadius.all(Radius.circular(15)),
-              ),
-          child: widget.imageTaken
-              ? FittedBox(
-                  fit: BoxFit.cover,
-                  clipBehavior: Clip.hardEdge,
-                  child: TextButton(
-                      style: ButtonStyle(
-                        padding: WidgetStatePropertyAll(EdgeInsets.all(0))
+            width: size,
+            height: size,
+            decoration: const BoxDecoration(
+                //color: Theme.of(context).colorScheme.primary,
+                //borderRadius: BorderRadius.all(Radius.circular(15)),
+                ),
+            child: widget.imageTaken
+                ? FittedBox(
+                    fit: BoxFit.cover,
+                    clipBehavior: Clip.hardEdge,
+                    child: TextButton(
+                        style: const ButtonStyle(
+                            padding: WidgetStatePropertyAll(EdgeInsets.all(0))),
+                        onPressed: makeImage,
+                        child: kIsWeb
+                            ? Image.memory(webImage!)
+                            : Image.file(image!)))
+                :
+                //not taken the img
+                Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: makeImage,
+                      splashColor: const Color.fromARGB(50, 255, 255, 255),
+                      child: Ink(
+                        child: widget.imageTaken
+                            ? FittedBox(
+                              fit: BoxFit.cover,
+                              clipBehavior: Clip.hardEdge,
+                              child: kIsWeb
+                                ? Image.memory(webImage!)
+                                : Image.file(image!)
+                            )
+                            : Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    widget.task,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: screenWidth / (oszto * 8),
+                                      color: Colors.black,
+                                    ),
+                                    softWrap: true,
+                                  ),
+                                  Container(
+                                      height: size / 3,
+                                      width: size / 2,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Icon(
+                                        Icons.camera_alt_outlined,
+                                        size: size / 5,
+                                        color: const Color.fromRGBO(
+                                            255, 255, 255, 0.6),
+                                        weight: 1,
+                                      )),
+                                ],
+                              ),
                       ),
-                      onPressed: makeImage,
-                      child: kIsWeb
-                          ? Image.memory(webImage!)
-                          : Image.file(image!)))
-              :
-              //not taken the img
+                    ),
+                  )
+
+            /*
               Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: TextButton(
@@ -170,14 +216,15 @@ class _TileState extends State<Tile> {
                             child: Icon(
                               Icons.camera_alt_outlined,
                               size: size / 5,
-                              color: Color.fromRGBO(255, 255, 255, 0.6),
+                              color: const Color.fromRGBO(255, 255, 255, 0.6),
                               weight: 1,
                             )),
                       ],
                     ),
                   ),
                 ),
-        ),
+              */
+            ),
       ),
     );
   }

@@ -1,6 +1,6 @@
 import 'package:bingo_app/main_page.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_animate/flutter_animate.dart';
 void main() {
   runApp(const MainApp());
 }
@@ -24,10 +24,16 @@ class MainApp extends StatelessWidget {
               elevation: 3,
               shadowColor: Colors.black,
               bottom: PreferredSize(preferredSize: const Size.fromHeight(3), child: Container(color: Colors.black, height: 3,)),
-              centerTitle: true,
-              title: Text(
-                'HUMAN BINGO',
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+              title: Row(
+                children: [
+                  Animate(
+                    effects: [FadeEffect(), ScaleEffect()],
+                    child: Text(
+                      'HUMAN BINGO',
+                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    ),
+                  )
+                ],
               ),
               leading: new Container(
                 alignment: Alignment.centerLeft,
@@ -36,6 +42,6 @@ class MainApp extends StatelessWidget {
               ),
               leadingWidth: MediaQuery.of(context).size.width / 3.5,
             ),
-            body: MainPage()));
+            body: const MainPage()));
   }
 }

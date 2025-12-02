@@ -1,7 +1,6 @@
-import 'package:bingo_app/models/gradient_text.dart';
 import 'package:bingo_app/models/tile.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -26,6 +25,8 @@ class _MainPageState extends State<MainPage> {
     "Has a tattoo"
   ];
   List<List> rows = [];
+
+  var resetCount = 0;
 
   void randomize() {
     tasks.shuffle();
@@ -65,7 +66,6 @@ class _MainPageState extends State<MainPage> {
     taskList[tasks.indexOf(task)] = true;
     for (bool i in taskList) {
       if (!i) {
-        print("Not all tasks are finished!");
         return;
       }
     }
@@ -75,7 +75,6 @@ class _MainPageState extends State<MainPage> {
   List<Tile> taskTiles = [];
 
   void getCells() {
-    print("eleg sokszor lefut...");
     taskTiles = [];
     for (int i = 0; i < tasks.length; i++) {
       taskTiles.add(Tile(tasks[i], finishTask));
@@ -87,7 +86,7 @@ class _MainPageState extends State<MainPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Center(child: Text("BINGO!")),
+        title: const Center(child: Text("BINGO!")),
         content: SizedBox(
           height: screenWidth / 4,
           width: screenWidth / 3,
@@ -99,10 +98,10 @@ class _MainPageState extends State<MainPage> {
               },
               child: const Text("YAY!"))
         ],
-        backgroundColor: Color.fromARGB(180, 0, 0, 0),
-        titleTextStyle: TextStyle(
+        backgroundColor: const Color.fromARGB(180, 0, 0, 0),
+        titleTextStyle: const TextStyle(
             fontSize: 30, color: Colors.white, fontWeight: FontWeight.w200),
-        contentTextStyle: TextStyle(
+        contentTextStyle: const TextStyle(
           color: Colors.white,
           fontSize: 17,
         ),
@@ -129,24 +128,32 @@ class _MainPageState extends State<MainPage> {
       cells.add(Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
-              topLeft: i == 0 ? Radius.circular(round) : Radius.circular(0),
-              topRight:
-                  i == size - 1 ? Radius.circular(round) : Radius.circular(0),
+              topLeft:
+                  i == 0 ? Radius.circular(round) : const Radius.circular(0),
+              topRight: i == size - 1
+                  ? Radius.circular(round)
+                  : const Radius.circular(0),
               bottomLeft: i == tasks.length - size
                   ? Radius.circular(round)
-                  : Radius.circular(0),
+                  : const Radius.circular(0),
               bottomRight: i == tasks.length - 1
                   ? Radius.circular(round)
-                  : Radius.circular(0)),
+                  : const Radius.circular(0)),
           border: Border(
               right: BorderSide(
-                  color: borderColor, width: i % size == size - 1 ? borderWidth : borderWidth / 2),
+                  color: borderColor,
+                  width: i % size == size - 1 ? borderWidth : borderWidth / 2),
               bottom: BorderSide(
                   color: borderColor,
-                  width: i > tasks.length - size - 1 ? borderWidth : borderWidth / 2),
-              left:
-                  BorderSide(color: borderColor, width: i % size == 0 ? borderWidth : borderWidth / 2),
-              top: BorderSide(color: borderColor, width: i < size ? borderWidth : borderWidth / 2)),
+                  width: i > tasks.length - size - 1
+                      ? borderWidth
+                      : borderWidth / 2),
+              left: BorderSide(
+                  color: borderColor,
+                  width: i % size == 0 ? borderWidth : borderWidth / 2),
+              top: BorderSide(
+                  color: borderColor,
+                  width: i < size ? borderWidth : borderWidth / 2)),
         ),
         child: taskTiles[i],
       ));
@@ -155,6 +162,7 @@ class _MainPageState extends State<MainPage> {
 
   void restart() {
     setState(() {
+      resetCount++;
       randomize();
       taskList = [
         false,
@@ -183,6 +191,9 @@ class _MainPageState extends State<MainPage> {
     getCells();
   }
 
+  bool _resetAnimation = false;
+  bool _isResetting = false;
+
   var boxcolor = Colors.blue;
   @override
   Widget build(BuildContext context) {
@@ -202,15 +213,15 @@ class _MainPageState extends State<MainPage> {
         child: SafeArea(
           child: Column(
             children: [
-              Material(
+              /*Material(
                 color: Colors.transparent, // Fontos!
                 child: InkWell(
                   onTap: () {
                     showBingo();
                   },
                   borderRadius: BorderRadius.circular(8),
-                  splashColor: Color.fromARGB(255, 15, 63, 102),
-                  highlightColor: Color.fromARGB(255, 63, 131, 199),
+                  splashColor: const Color.fromARGB(255, 15, 63, 102),
+                  highlightColor: const Color.fromARGB(255, 63, 131, 199),
                   child: Ink(
                     decoration: BoxDecoration(
                       color: const Color.fromARGB(255, 255, 255, 255),
@@ -219,44 +230,107 @@ class _MainPageState extends State<MainPage> {
                     ),
                     width: 80,
                     height: 80,
-                    child: Center(
+                    child: const Center(
                       child: Text('data'),
                     ),
                   ),
                 ),
+              ),*/
+              const SizedBox(
+                height: 25,
               ),
-              SizedBox(height: 25,),
               Expanded(
-                child: GridView.count(crossAxisCount: size, children: cells),
+                child: GridView.count(crossAxisCount: size, children: [
+                  for (int i = 0; i < cells.length; i++)
+                    Animate(
+                      delay: (i * 120).ms,
+                      effects: [
+                        SlideEffect(begin: Offset(0, 0.5), end: Offset.zero),
+                        FadeEffect()
+                      ],
+                      key: ValueKey('${resetCount}_$i'),
+                      child: cells[i],
+                    )
+                ]),
               ),
-              Material(
-                color: Colors.transparent, // Fontos!
-                child: InkWell(
-                    borderRadius: BorderRadius.circular(14),
-                    onTap: restart,
-                    splashColor: Color.fromRGBO(255, 109, 51, 0.5),
-                    child: Ink(
-                      height: 50,
-                      width: 140,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(14),
-                        color: const Color.fromRGBO(255, 255, 255, 0.2),
-                        border: Border.all(color: const Color.fromARGB(255, 255, 255, 255), width: 2),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'RESTART',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 17,
-                            letterSpacing: 0.7,
-                            color: Colors.white
-                          ),
+              Column(
+                children: [
+                  // RESET gomb
+                  Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(14),
+                  splashColor: const Color.fromRGBO(255, 109, 51, 0.5),
+                      onTap: () {
+                        // 1. Animáció indítása
+                        setState(() {
+                          _resetAnimation = true;
+                          _isResetting = true;
+                        });
+
+                        // 2. Reset logika
+                        restart();
+
+                        // 3. Animáció visszaállítása
+                        Future.delayed(1.seconds, () {
+                          setState(() {
+                            _resetAnimation = false;
+                          _isResetting = false;
+                          });
+                        });
+                      },
+                      child: Ink(
+                        height: 50,
+                        width: 150,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(14),
+                          color: const Color.fromRGBO(255, 255, 255, 0.2),
+                          border: Border.all(
+                              color: const Color.fromARGB(255, 255, 255, 255),
+                              width: 2),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            _isResetting 
+  ? Icon(Icons.refresh, color: Colors.white)
+      .animate()
+      .rotate(duration: 0.9.seconds)
+  : Icon(Icons.refresh, color: Colors.white),
+                            SizedBox(width: 8),
+                            Text(
+                              'RESTART',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 17,
+                                  letterSpacing: 0.7,
+                                  color: Colors.white),
+                            ),
+                          ],
                         ),
                       ),
-                    )),
+                    ),
+                  ),
+
+                  // Animáció amit a gomb indít
+                  Container(
+                    padding: EdgeInsets.all(16),
+                    child: Text(
+                      'New game started!',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  )
+                      .animate(
+                        autoPlay: false,
+                        target: _resetAnimation ? 1 : 0,
+                      )
+                      .fadeIn(duration: 300.ms)
+                      .slideY(begin: -0.5)
+                      .then(delay: 500.ms)
+                      .fadeOut(duration: 300.ms),
+                ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
             ],
           ),
         ),
@@ -264,12 +338,34 @@ class _MainPageState extends State<MainPage> {
     );
   }
 }
-
-// tasks.map((e) => Tile(e, finishTask)).toList(),
 /*
-...rows.map((datas) {
-            return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: datas.map((item) => Tile(item, finishTask)).toList());
-          })
+Material(
+                color: Colors.transparent, // Fontos!
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(14),
+                  onTap: restart,
+                  splashColor: const Color.fromRGBO(255, 109, 51, 0.5),
+                  child: Ink(
+                    height: 50,
+                    width: 140,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(14),
+                      color: const Color.fromRGBO(255, 255, 255, 0.2),
+                      border: Border.all(
+                          color: const Color.fromARGB(255, 255, 255, 255),
+                          width: 2),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        'RESTART',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 17,
+                            letterSpacing: 0.7,
+                            color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
 */
