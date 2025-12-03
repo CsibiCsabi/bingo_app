@@ -77,7 +77,7 @@ class _TileState extends State<Tile> {
                       16, 16, 16, 16), // left, top, right, bottom
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadiusGeometry.circular(24),
-                    side: BorderSide(color: Colors.white, width: 3),
+                    side: const BorderSide(color: Colors.white, width: 3),
                   ),
                   content: Center(
                     child: ClipRRect(
@@ -166,23 +166,23 @@ class _TileState extends State<Tile> {
       borderRadius: BorderRadiusGeometry.only(
           topLeft: widget.corner == "topLeft"
               ? Radius.circular(round)
-              : Radius.circular(0),
+              : const Radius.circular(0),
           topRight: widget.corner == "topRight"
               ? Radius.circular(round)
-              : Radius.circular(0),
+              : const Radius.circular(0),
           bottomLeft: widget.corner == "bottomLeft"
               ? Radius.circular(round)
-              : Radius.circular(0),
+              : const Radius.circular(0),
           bottomRight: widget.corner == "bottomRight"
               ? Radius.circular(round)
-              : Radius.circular(0)),
+              : const Radius.circular(0)),
       child: FittedBox(
         fit: BoxFit.cover,
         clipBehavior: Clip.hardEdge,
         child: Container(
           width: size,
           height: size,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               //color: Theme.of(context).colorScheme.primary,
               //borderRadius: BorderRadius.all(Radius.circular(15)),
               ),
@@ -191,7 +191,7 @@ class _TileState extends State<Tile> {
                   fit: BoxFit.cover,
                   clipBehavior: Clip.hardEdge,
                   child: TextButton(
-                      style: ButtonStyle(
+                      style: const ButtonStyle(
                           padding: WidgetStatePropertyAll(EdgeInsets.all(0))),
                       onPressed: makeImage,
                       child: kIsWeb
@@ -227,7 +227,7 @@ class _TileState extends State<Tile> {
                             child: Icon(
                               Icons.camera_alt_outlined,
                               size: size / 5,
-                              color: Color.fromRGBO(255, 255, 255, 0.6),
+                              color: const Color.fromRGBO(255, 255, 255, 0.6),
                               weight: 1,
                             )),
                       ],

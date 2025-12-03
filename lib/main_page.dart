@@ -87,7 +87,7 @@ class _MainPageState extends State<MainPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Center(child: Text("BINGO!")),
+        title: const Center(child: Text("BINGO!")),
         content: SizedBox(
           height: screenWidth / 4,
           width: screenWidth / 3,
@@ -99,10 +99,10 @@ class _MainPageState extends State<MainPage> {
               },
               child: const Text("YAY!"))
         ],
-        backgroundColor: Color.fromARGB(180, 0, 0, 0),
-        titleTextStyle: TextStyle(
+        backgroundColor: const Color.fromARGB(180, 0, 0, 0),
+        titleTextStyle: const TextStyle(
             fontSize: 30, color: Colors.white, fontWeight: FontWeight.w200),
-        contentTextStyle: TextStyle(
+        contentTextStyle: const TextStyle(
           color: Colors.white,
           fontSize: 17,
         ),
@@ -129,15 +129,15 @@ class _MainPageState extends State<MainPage> {
       cells.add(Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
-              topLeft: i == 0 ? Radius.circular(round) : Radius.circular(0),
+              topLeft: i == 0 ? Radius.circular(round) : const Radius.circular(0),
               topRight:
-                  i == size - 1 ? Radius.circular(round) : Radius.circular(0),
+                  i == size - 1 ? Radius.circular(round) : const Radius.circular(0),
               bottomLeft: i == tasks.length - size
                   ? Radius.circular(round)
-                  : Radius.circular(0),
+                  : const Radius.circular(0),
               bottomRight: i == tasks.length - 1
                   ? Radius.circular(round)
-                  : Radius.circular(0)),
+                  : const Radius.circular(0)),
           border: Border(
               right: BorderSide(
                   color: borderColor, width: i % size == size - 1 ? borderWidth : borderWidth / 2),
@@ -209,8 +209,8 @@ class _MainPageState extends State<MainPage> {
                     showBingo();
                   },
                   borderRadius: BorderRadius.circular(8),
-                  splashColor: Color.fromARGB(255, 15, 63, 102),
-                  highlightColor: Color.fromARGB(255, 63, 131, 199),
+                  splashColor: const Color.fromARGB(255, 15, 63, 102),
+                  highlightColor: const Color.fromARGB(255, 63, 131, 199),
                   child: Ink(
                     decoration: BoxDecoration(
                       color: const Color.fromARGB(255, 255, 255, 255),
@@ -219,13 +219,13 @@ class _MainPageState extends State<MainPage> {
                     ),
                     width: 80,
                     height: 80,
-                    child: Center(
+                    child: const Center(
                       child: Text('data'),
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: 25,),
+              const SizedBox(height: 25,),
               Expanded(
                 child: GridView.count(crossAxisCount: size, children: cells),
               ),
@@ -234,7 +234,7 @@ class _MainPageState extends State<MainPage> {
                 child: InkWell(
                     borderRadius: BorderRadius.circular(14),
                     onTap: restart,
-                    splashColor: Color.fromRGBO(255, 109, 51, 0.5),
+                    splashColor: const Color.fromRGBO(255, 109, 51, 0.5),
                     child: Ink(
                       height: 50,
                       width: 140,
@@ -256,7 +256,7 @@ class _MainPageState extends State<MainPage> {
                       ),
                     )),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
             ],
           ),
         ),

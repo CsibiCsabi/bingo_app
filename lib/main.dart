@@ -35,6 +35,6 @@ class MainApp extends StatelessWidget {
                 ],
               ),
             ),
-            body: MainPage()));
+            body: const MainPage()));
   }
 }
