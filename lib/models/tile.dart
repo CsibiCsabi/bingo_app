@@ -113,6 +113,8 @@ class _TileState extends State<Tile> {
 
                               setState(() {
                                 widget.imageTaken = true;
+                                widget.onFinish(widget.task);
+
                               });
                               Navigator.pop(context);
                             },
@@ -153,12 +155,6 @@ class _TileState extends State<Tile> {
     } finally {
       await webController?.dispose();
       webController = null;
-    }
-    if (PickedFile != null) {
-      setState(() {
-        widget.imageTaken = true;
-        widget.onFinish(widget.task);
-      });
     }
   }
   
