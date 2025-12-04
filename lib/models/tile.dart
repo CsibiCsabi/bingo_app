@@ -55,13 +55,13 @@ class _TileState extends State<Tile> {
     }
   }
 
-  /*
+  
   CameraController? webController;
 
   Future<void> webCamera() async {
     _cameras = await availableCameras();
-    webController = CameraController(_cameras[0], ResolutionPreset.max);
-
+    final frontCamera = _cameras.firstWhere((c) => c.lensDirection == CameraLensDirection.front, orElse: () => _cameras.first);
+    webController = CameraController(frontCamera, ResolutionPreset.veryHigh, enableAudio: false);
     
 
     try {
@@ -155,13 +155,62 @@ class _TileState extends State<Tile> {
     }
   }
   
-  */
+  
+  /*
+bool _isSwitchingCamera = false;
+int _selectedWebCameraIndex = 0;
+
+  Future<void> _switchToCamera(int index) async {
+  if (_isSwitchingCamera) return;
+  _isSwitchingCamera = true;
+
+  try {
+    final oldController = webController;
+
+    // Create new controller but don't overwrite webController yet
+    final newController = CameraController(
+      _cameras[index],
+      ResolutionPreset.max,
+      enableAudio: false,
+    );
+
+    // initialize the new one
+    await newController.initialize();
+
+    // If widget got disposed while initializing, dispose new and return
+    if (!mounted) {
+      await newController.dispose();
+      return;
+    }
+
+    // Now swap: first set the active controller to the new one
+    setState(() {
+      webController = newController;
+      _selectedWebCameraIndex = index;
+    });
+
+    // dispose old controller after we've swapped (avoid flicker)
+    if (oldController != null) {
+      try {
+        await oldController.dispose();
+      } catch (_) {}
+    }
+  } catch (e, st) {
+    // handle errors: keep previous controller if initialization failed
+    print('Camera switch failed: $e\n$st');
+  } finally {
+    _isSwitchingCamera = false;
+  }
+}
+
 
   CameraController? webController;
 
   Future<void> webCamera() async {
     _cameras = await availableCameras();
     webController = CameraController(_cameras[0], ResolutionPreset.max);
+    bool flippedCamera = false;
+    print(_cameras.length);
 
     try {
       await webController!.initialize();
@@ -209,15 +258,20 @@ class _TileState extends State<Tile> {
                             child: InkWell(
                               borderRadius: BorderRadius.circular(14),
                               onTap: () async {
-                                // Capture image
-                                final picture =
-                                    await webController!.takePicture();
-                                webImage = await picture.readAsBytes();
+                                if (_cameras.length > 1) {
+                                  if (!flippedCamera) {
+                                    flippedCamera = true;
+                                     webController = CameraController(_cameras[1], ResolutionPreset.max);
+                                  } else {
+                                    flippedCamera = false;
+                                     webController = CameraController(_cameras[0], ResolutionPreset.max);
+                                  }
+                                  CameraPreview(webController!);
 
-                                setState(() {
-                                  widget.imageTaken = true;
-                                });
-                                Navigator.pop(context); // Close dialog
+                                  setState(() {
+                                    
+                                  });
+                                }
                               },
                               child: Ink(
                                 height: 60, // button height
@@ -311,7 +365,7 @@ class _TileState extends State<Tile> {
       webController = null;
     }
   }
-
+*/
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
