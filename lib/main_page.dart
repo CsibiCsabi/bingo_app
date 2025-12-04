@@ -71,14 +71,21 @@ class _MainPageState extends State<MainPage> {
   ];
 
   void finishTask(task) {
+   // print(task);
     taskList[tasks.indexOf(task)] = true;
-    for (Tile i in tasks){
-      if (!i.imageTaken){
-        print("not all tasks are finished");
+    for (bool i in taskList) {
+      if (!i) {
         return;
       }
     }
-    print("all tasks are finsihed");
+    /*
+    for (Tile i in tasks){
+      if (!i.imageTaken){
+      //  print("not all tasks are finished");
+        return;
+      }
+    }*/
+    //print("all tasks are finsihed");
     showBingo();
     }
 
@@ -92,7 +99,7 @@ class _MainPageState extends State<MainPage> {
   }
 
   void showBingo() {
-    print("showing bingpo");
+   // print("showing bingpo");
     double screenWidth = MediaQuery.of(context).size.width;
     int imgNum = random.nextInt(taskTiles.length);
     showDialog(
