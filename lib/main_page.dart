@@ -384,29 +384,7 @@ class _MainPageState extends State<MainPage> {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  Material(
-                    color: Colors.transparent, // Fontos!
-                    child: InkWell(
-                      onTap: () {
-                        showBingo();
-                      },
-                      borderRadius: BorderRadius.circular(8),
-                      splashColor: const Color.fromARGB(255, 15, 63, 102),
-                      highlightColor: const Color.fromARGB(255, 63, 131, 199),
-                      child: Ink(
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 255, 255, 255),
-                          borderRadius:
-                              BorderRadius.circular(8), // Ugyanaz a radius
-                        ),
-                        width: 80,
-                        height: 80,
-                        child: const Center(
-                          child: Text('data'),
-                        ),
-                      ),
-                    ),
-                  ),
+                  
                   Expanded(
                     child: GridView.count(
                       addAutomaticKeepAlives: true,
