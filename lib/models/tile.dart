@@ -55,11 +55,14 @@ class _TileState extends State<Tile> {
     }
   }
 
+  
   CameraController? webController;
 
   Future<void> webCamera() async {
     _cameras = await availableCameras();
-    webController = CameraController(_cameras[0], ResolutionPreset.max);
+    final frontCamera = _cameras.firstWhere((c) => c.lensDirection == CameraLensDirection.front, orElse: () => _cameras.first);
+    webController = CameraController(frontCamera, ResolutionPreset.veryHigh, enableAudio: false);
+    
 
     try {
       await webController!.initialize();
@@ -132,6 +135,8 @@ class _TileState extends State<Tile> {
                           ),
                         ),
                       ),
+                      
+                    ),
                     )
                   ],
                 ),
@@ -150,7 +155,7 @@ class _TileState extends State<Tile> {
       webController = null;
     }
   }
-
+  
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -175,14 +180,69 @@ class _TileState extends State<Tile> {
         fit: BoxFit.cover,
         clipBehavior: Clip.hardEdge,
         child: Container(
-          width: size,
-          height: size,
-          decoration: const BoxDecoration(
-              ),
-          child: widget.imageTaken
-              ? FittedBox(
-                  fit: BoxFit.cover,
-                  clipBehavior: Clip.hardEdge,
+            width: size,
+            height: size,
+            decoration: const BoxDecoration(
+                //color: Theme.of(context).colorScheme.primary,
+                //borderRadius: BorderRadius.all(Radius.circular(15)),
+                ),
+            child: widget.imageTaken
+                ? FittedBox(
+                    fit: BoxFit.cover,
+                    clipBehavior: Clip.hardEdge,
+                    child: TextButton(
+                        style: const ButtonStyle(
+                            padding: WidgetStatePropertyAll(EdgeInsets.all(0))),
+                        onPressed: makeImage,
+                        child: kIsWeb
+                            ? Image.memory(webImage!)
+                            : Image.file(image!)))
+                :
+                //not taken the img
+
+                Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: makeImage,
+                      splashColor: const Color.fromARGB(50, 255, 255, 255),
+                      child: Ink(
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                widget.task,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: screenWidth / (oszto * 8),
+                                  color: Colors.black,
+                                ),
+                                softWrap: true,
+                              ),
+                              Container(
+                                  height: size / 3,
+                                  width: size / 2,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Icon(
+                                    Icons.camera_alt_outlined,
+                                    size: size / 5,
+                                    color: const Color.fromRGBO(
+                                        255, 255, 255, 0.6),
+                                    weight: 1,
+                                  )),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+
+            /*
+              Padding(
+                  padding: const EdgeInsets.all(5.0),
                   child: TextButton(
                       style: const ButtonStyle(
                           padding: WidgetStatePropertyAll(EdgeInsets.all(0))),
