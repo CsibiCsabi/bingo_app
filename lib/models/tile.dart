@@ -61,10 +61,11 @@ class _TileState extends State<Tile> {
     _cameras = await availableCameras();
     webController = CameraController(_cameras[0], ResolutionPreset.max);
 
+    
+
     try {
       await webController!.initialize();
       if (!mounted) return;
-      bool buttonPressed = false;
 
       // Show live preview in a dialog
       await showDialog(
@@ -103,7 +104,7 @@ class _TileState extends State<Tile> {
                         child: Material(
                           color: Colors.transparent,
                           child: InkWell(
-                            borderRadius: BorderRadius.circular(14),
+                          borderRadius: BorderRadius.circular(14),
                           onTap: () async {
                             // Capture image
                             final picture = await webController!.takePicture();
@@ -111,10 +112,9 @@ class _TileState extends State<Tile> {
 
                             setState(() {
                               widget.imageTaken = true;
-                              buttonPressed = true;
                             });
 
-                           // await Future.delayed(200.ms);
+                           await Future.delayed(200.ms);
 
                             Navigator.pop(context); // Close dialog
                           },
@@ -166,23 +166,23 @@ class _TileState extends State<Tile> {
       borderRadius: BorderRadiusGeometry.only(
           topLeft: widget.corner == "topLeft"
               ? Radius.circular(round)
-              : const Radius.circular(0),
+              : Radius.circular(0),
           topRight: widget.corner == "topRight"
               ? Radius.circular(round)
-              : const Radius.circular(0),
+              : Radius.circular(0),
           bottomLeft: widget.corner == "bottomLeft"
               ? Radius.circular(round)
-              : const Radius.circular(0),
+              : Radius.circular(0),
           bottomRight: widget.corner == "bottomRight"
               ? Radius.circular(round)
-              : const Radius.circular(0)),
+              : Radius.circular(0)),
       child: FittedBox(
         fit: BoxFit.cover,
         clipBehavior: Clip.hardEdge,
         child: Container(
           width: size,
           height: size,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
               //color: Theme.of(context).colorScheme.primary,
               //borderRadius: BorderRadius.all(Radius.circular(15)),
               ),
@@ -191,7 +191,7 @@ class _TileState extends State<Tile> {
                   fit: BoxFit.cover,
                   clipBehavior: Clip.hardEdge,
                   child: TextButton(
-                      style: const ButtonStyle(
+                      style: ButtonStyle(
                           padding: WidgetStatePropertyAll(EdgeInsets.all(0))),
                       onPressed: makeImage,
                       child: kIsWeb
@@ -227,7 +227,7 @@ class _TileState extends State<Tile> {
                             child: Icon(
                               Icons.camera_alt_outlined,
                               size: size / 5,
-                              color: const Color.fromRGBO(255, 255, 255, 0.6),
+                              color: Color.fromRGBO(255, 255, 255, 0.6),
                               weight: 1,
                             )),
                       ],
