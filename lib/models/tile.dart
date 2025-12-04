@@ -51,6 +51,7 @@ class _TileState extends State<Tile> {
         widget.image = File(PickedFile.path);
         widget.imageTaken = true;
         widget.onFinish(widget.task);
+        print("task finished: "+ widget.task);
       });
     }
   }
@@ -112,6 +113,8 @@ class _TileState extends State<Tile> {
 
                               setState(() {
                                 widget.imageTaken = true;
+                                widget.onFinish(widget.task);
+
                               });
                               Navigator.pop(context);
                             },
