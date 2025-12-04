@@ -145,8 +145,8 @@ class _TileState extends State<Tile> {
                       begin: -1,
                       end: 0,
                       curve: Curves.easeOut,
-                      duration: 500.ms)
-                  .fadeIn(duration: 500.ms));
+                      duration: 300.ms)
+                  .fadeIn(duration: 300.ms));
     } catch (e) {
       print("Camera error: $e");
     } finally {
