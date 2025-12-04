@@ -74,9 +74,11 @@ class _MainPageState extends State<MainPage> {
     taskList[tasks.indexOf(task)] = true;
     for (bool i in taskList) {
       if (!i) {
+        print("not all tasks finisshed!");
         return;
       }
     }
+    print("all tasks are finsihed");
     showBingo();
   }
 
@@ -90,6 +92,7 @@ class _MainPageState extends State<MainPage> {
   }
 
   void showBingo() {
+    print("showing bingpo");
     double screenWidth = MediaQuery.of(context).size.width;
     int imgNum = random.nextInt(taskTiles.length);
     showDialog(
@@ -384,7 +387,6 @@ class _MainPageState extends State<MainPage> {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  
                   Expanded(
                     child: GridView.count(
                       addAutomaticKeepAlives: true,
