@@ -137,7 +137,6 @@ class _TileState extends State<Tile> {
                       ),
                       
                     ),
-                    )
                   ],
                 ),
               )
@@ -195,8 +194,8 @@ class _TileState extends State<Tile> {
                             padding: WidgetStatePropertyAll(EdgeInsets.all(0))),
                         onPressed: makeImage,
                         child: kIsWeb
-                            ? Image.memory(webImage!)
-                            : Image.file(image!)))
+                            ? Image.memory(widget.webImage!)
+                            : Image.file(widget.image!)))
                 :
                 //not taken the img
 
@@ -291,6 +290,7 @@ class _TileState extends State<Tile> {
                     ),
                   ),
                 ),
+                */
         ),
       ),
     );
