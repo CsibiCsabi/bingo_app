@@ -26,6 +26,6 @@ class MainApp extends StatelessWidget {
         theme: ThemeData().copyWith(
           colorScheme: kColorScheme,
         ),
-        home: MainPage());
+        home: const MainPage());
   }
 }

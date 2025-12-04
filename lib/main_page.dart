@@ -10,6 +10,9 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  Color ccOrange = const Color.fromRGBO(255, 109, 51, 1);
+  Color ccPurple = const Color.fromRGBO(77, 86, 245, 1);
+  Color sarga = const Color.fromARGB(255, 255, 255, 255);
   List tasks = [
     "Is vegetarian",
     "Is left handed",
@@ -86,19 +89,90 @@ class _MainPageState extends State<MainPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Center(child: Text("BINGO!")),
-        content: SizedBox(
-          height: screenWidth / 4,
-          width: screenWidth / 3,
+        content: ClipRRect(
+          borderRadius: BorderRadiusGeometry.circular(14),
+          child: Animate(
+            effects: [
+              ScaleEffect(
+                duration: Duration(milliseconds: 300),
+                begin: Offset(0, 0),
+              ),
+              ShimmerEffect(
+                color: ccPurple,
+                duration: Duration(milliseconds: 700),
+                delay: Duration(milliseconds: 400),
+              ),
+              //ColorEffect(end: Color.fromRGBO(46, 51, 159, 1), blendMode: BlendMode.color)
+            ],
+            child: Container(
+              decoration: BoxDecoration(
+                color: Color.fromARGB(177, 0, 0, 0),
+                borderRadius: BorderRadius.circular(14),
+                //border: Border.all(color: ccPurple, width: 2)
+              ),
+              height: MediaQuery.of(context).size.height / 2.5,
+              width: screenWidth / 1.5,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children:
+                          "B I N G O".characters.toList().asMap().entries.map((entry) {
+                        final i = entry.key;
+                        final char = entry.value;
+                        return Text(char, style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),)
+                            .animate(
+                              delay: (i * 70).ms,
+                              onPlay: (c) => c.repeat(reverse: true),
+                            )
+                            .moveY(begin: 0, end: -20, duration: 500.ms);
+                      }).toList(),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Material(
+                          color: Colors.transparent, // Fontos!
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(14),
+                            onTap: () {
+                              Navigator.of(context).pop(false);
+                            },
+                            splashColor: ccPurple.withAlpha(0),
+                            child: Ink(
+                              height: 40,
+                              width: 80,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(14),
+                                color: const Color.fromARGB(100, 0, 0, 0),
+                                border: Border.all(color: sarga, width: 2),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'YAY!',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 17,
+                                      letterSpacing: 0.7,
+                                      color: sarga),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
         ),
-        actions: [
-          ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-              child: const Text("YAY!"))
-        ],
-        backgroundColor: const Color.fromARGB(180, 0, 0, 0),
+        backgroundColor: Colors.transparent,
         titleTextStyle: const TextStyle(
             fontSize: 30, color: Colors.white, fontWeight: FontWeight.w200),
         contentTextStyle: const TextStyle(
@@ -205,25 +279,53 @@ class _MainPageState extends State<MainPage> {
         shadowColor: Colors.black,
         bottom: PreferredSize(
             preferredSize: const Size.fromHeight(3),
-            child: Container(
-              color: Colors.black,
-              height: 3,
-            )),
-        title: Row(
-          children: [
-            Animate(
-              effects: [FadeEffect(), ScaleEffect()],
-              child: Text(
-                'HUMAN BINGO',
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+            child: Animate(
+              effects: [
+                FadeEffect(duration: Duration(milliseconds: 1000)),
+                ScaleEffect(duration: Duration(milliseconds: 1000))
+              ],
+              child: Container(
+                color: Colors.black,
+                height: 3,
               ),
+            )),
+        centerTitle: true,
+        title: Animate(
+          autoPlay: true,
+          effects: const [
+            FadeEffect(duration: Duration(milliseconds: 1000)),
+            ScaleEffect(
+                duration: Duration(milliseconds: 1000),
+                begin: Offset(0, 0),
+                end: Offset(1.1, 1.1)),
+            ScaleEffect(
+                duration: Duration(milliseconds: 150),
+                begin: Offset(1.1, 1.1),
+                end: Offset(1, 1),
+                delay: Duration(milliseconds: 1000)),
+            ShimmerEffect(
+              color: Color.fromARGB(255, 167, 193, 206),
+              duration: Duration(milliseconds: 2000),
+              delay: Duration(milliseconds: 1550),
+              size: 2,
             )
           ],
+          child: const Text(
+            'HUMAN BINGO',
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          ),
         ),
-        leading: new Container(
+        leading: Container(
           alignment: Alignment.centerLeft,
-          padding: new EdgeInsets.all(8.0),
-          child: Image.asset('assets/course_creators.png'),
+          padding: const EdgeInsets.all(8.0),
+          child: Animate(
+            effects: const [
+              FadeEffect(duration: Duration(milliseconds: 1000)),
+              ScaleEffect(duration: Duration(milliseconds: 1000)),
+              ColorEffect()
+            ],
+            child: Image.asset('assets/course_creators.png'),
+          ),
         ),
         leadingWidth: MediaQuery.of(context).size.width / 3.5,
       ),
@@ -243,7 +345,6 @@ class _MainPageState extends State<MainPage> {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  /* DEBUG:showBingo debug inkwell
                   Material(
                     color: Colors.transparent, // Fontos!
                     child: InkWell(
@@ -266,14 +367,15 @@ class _MainPageState extends State<MainPage> {
                         ),
                       ),
                     ),
-                  ),*/
+                  ),
                   Expanded(
                     child: GridView.count(crossAxisCount: size, children: [
                       for (int i = 0; i < cells.length; i++)
                         Animate(
                           delay: (i * 120).ms,
-                          effects: [
-                            SlideEffect(begin: Offset(0, 0.5), end: Offset.zero),
+                          effects: const [
+                            SlideEffect(
+                                begin: Offset(0, 0.5), end: Offset.zero),
                             FadeEffect()
                           ],
                           key: ValueKey('${resetCount}_$i'),
@@ -297,10 +399,10 @@ class _MainPageState extends State<MainPage> {
                               _resetAnimation = true;
                               _isResetting = true;
                             });
-              
+
                             // 2. Reset logika
                             restart();
-              
+
                             // 3. Animáció visszaállítása
                             Future.delayed(1.seconds, () {
                               setState(() {
@@ -316,19 +418,22 @@ class _MainPageState extends State<MainPage> {
                               borderRadius: BorderRadius.circular(14),
                               color: const Color.fromRGBO(255, 255, 255, 0.2),
                               border: Border.all(
-                                  color: const Color.fromARGB(255, 255, 255, 255),
+                                  color:
+                                      const Color.fromARGB(255, 255, 255, 255),
                                   width: 2),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 _isResetting
-                                    ? Icon(Icons.refresh, color: Colors.white)
+                                    ? const Icon(Icons.refresh,
+                                            color: Colors.white)
                                         .animate()
                                         .rotate(duration: 0.5.seconds)
-                                    : Icon(Icons.refresh, color: Colors.white),
-                                SizedBox(width: 8),
-                                Text(
+                                    : const Icon(Icons.refresh,
+                                        color: Colors.white),
+                                const SizedBox(width: 8),
+                                const Text(
                                   'RESTART',
                                   style: TextStyle(
                                       fontWeight: FontWeight.w600,
@@ -343,8 +448,8 @@ class _MainPageState extends State<MainPage> {
                       ),
                       // Animáció amit a gomb indít
                       Container(
-                        padding: EdgeInsets.all(16),
-                        child: Text(
+                        padding: const EdgeInsets.all(16),
+                        child: const Text(
                           'Started new game!',
                           style: TextStyle(fontSize: 18),
                         ),
