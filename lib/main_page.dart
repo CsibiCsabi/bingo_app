@@ -326,15 +326,6 @@ class _MainPageState extends State<MainPage> {
           autoPlay: true,
           effects: const [
             FadeEffect(duration: Duration(milliseconds: 1000)),
-            ScaleEffect(
-                duration: Duration(milliseconds: 1000),
-                begin: Offset(0, 0),
-                end: Offset(1.1, 1.1)),
-            ScaleEffect(
-                duration: Duration(milliseconds: 150),
-                begin: Offset(1.1, 1.1),
-                end: Offset(1, 1),
-                delay: Duration(milliseconds: 1000)),
             ShimmerEffect(
               color: Color.fromARGB(255, 167, 193, 206),
               duration: Duration(milliseconds: 2000),
@@ -433,6 +424,7 @@ class _MainPageState extends State<MainPage> {
                         )
                     ]),
                   ),
+                  const SizedBox(height: 15),
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.end,
