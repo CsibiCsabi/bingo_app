@@ -113,9 +113,6 @@ class _TileState extends State<Tile> {
                             setState(() {
                               widget.imageTaken = true;
                             });
-
-                           await Future.delayed(200.ms);
-
                             Navigator.pop(context); // Close dialog
                           },
                           child: Ink(

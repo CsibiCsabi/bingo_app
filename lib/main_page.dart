@@ -176,7 +176,6 @@ class _MainPageState extends State<MainPage> {
         titleTextStyle: const TextStyle(
             fontSize: 30, color: Colors.white, fontWeight: FontWeight.w200),
         contentTextStyle: const TextStyle(
-        contentTextStyle: const TextStyle(
           color: Colors.white,
           fontSize: 17,
         ),
@@ -211,10 +210,8 @@ class _MainPageState extends State<MainPage> {
               bottomLeft: i == tasks.length - size
                   ? Radius.circular(round)
                   : const Radius.circular(0),
-                  : const Radius.circular(0),
               bottomRight: i == tasks.length - 1
                   ? Radius.circular(round)
-                  : const Radius.circular(0)),
                   : const Radius.circular(0)),
           border: Border(
               right: BorderSide(
