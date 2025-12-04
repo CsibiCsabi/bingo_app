@@ -280,7 +280,7 @@ class _MainPageState extends State<MainPage> {
         bottom: PreferredSize(
             preferredSize: const Size.fromHeight(3),
             child: Animate(
-              effects: [
+              effects: const [
                 FadeEffect(duration: Duration(milliseconds: 1000)),
                 ScaleEffect(duration: Duration(milliseconds: 1000))
               ],
@@ -322,7 +322,6 @@ class _MainPageState extends State<MainPage> {
             effects: const [
               FadeEffect(duration: Duration(milliseconds: 1000)),
               ScaleEffect(duration: Duration(milliseconds: 1000)),
-              ColorEffect()
             ],
             child: Image.asset('assets/course_creators.png'),
           ),
