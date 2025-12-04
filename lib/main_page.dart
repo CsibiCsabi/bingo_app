@@ -13,6 +13,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  bool isGrey = true;
   final random = Random();
   Color ccOrange = const Color.fromRGBO(255, 109, 51, 1);
   Color ccPurple = const Color.fromRGBO(77, 86, 245, 1);
@@ -124,8 +125,12 @@ class _MainPageState extends State<MainPage> {
                   children: [
                     Row(
                       mainAxisSize: MainAxisSize.min,
-                      children:
-                          "B I N G O".characters.toList().asMap().entries.map((entry) {
+                      children: "B I N G O"
+                          .characters
+                          .toList()
+                          .asMap()
+                          .entries
+                          .map((entry) {
                         final i = entry.key;
                         final char = entry.value;
                         return Text(char, style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold),)
@@ -285,6 +290,11 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     getCells();
+    Future.delayed(const Duration(milliseconds: 2000), () {
+      setState(() {
+        isGrey = false;
+      });
+    });
   }
 
   bool _resetAnimation = false;
@@ -328,7 +338,7 @@ class _MainPageState extends State<MainPage> {
             ShimmerEffect(
               color: Color.fromARGB(255, 167, 193, 206),
               duration: Duration(milliseconds: 2000),
-              delay: Duration(milliseconds: 1550),
+              delay: Duration(milliseconds: 4000),
               size: 2,
             )
           ],
@@ -338,16 +348,33 @@ class _MainPageState extends State<MainPage> {
           ),
         ),
         leading: Container(
-          alignment: Alignment.centerLeft,
-          padding: const EdgeInsets.all(8.0),
-          child: Animate(
-            effects: const [
-              FadeEffect(duration: Duration(milliseconds: 1000)),
-              ScaleEffect(duration: Duration(milliseconds: 1000)),
-            ],
-            child: Image.asset('assets/course_creators.png'),
-          ),
-        ),
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.all(8.0),
+            child: Animate(
+              autoPlay: true,
+              effects: const [
+                ShimmerEffect(
+                  color: Color.fromARGB(255, 167, 193, 206),
+                  duration: Duration(milliseconds: 2000),
+                  delay: Duration(milliseconds: 2500),
+                  size: 2,
+                )
+              ],
+              child: Stack(
+              children: [
+                AnimatedOpacity(
+                  opacity: isGrey ? 1.0 : 0.0,
+                  duration: const Duration(milliseconds: 400),
+                  child: Image.asset('assets/course_creators_gray.png'),
+                ),
+                AnimatedOpacity(
+                  opacity: isGrey ? 0.0 : 1.0,
+                  duration: const Duration(milliseconds: 400),
+                  child: Image.asset('assets/course_creators.png'),
+                ),
+              ],
+            ),
+            )),
         leadingWidth: MediaQuery.of(context).size.width / 3.5,
       ),
       body: Container(
