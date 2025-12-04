@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:bingo_app/models/tile.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
@@ -10,6 +13,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  final random = Random();
   Color ccOrange = const Color.fromRGBO(255, 109, 51, 1);
   Color ccPurple = const Color.fromRGBO(77, 86, 245, 1);
   Color sarga = const Color.fromARGB(255, 255, 255, 255);
@@ -86,6 +90,7 @@ class _MainPageState extends State<MainPage> {
 
   void showBingo() {
     double screenWidth = MediaQuery.of(context).size.width;
+    int imgNum = random.nextInt(taskTiles.length);
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -93,77 +98,94 @@ class _MainPageState extends State<MainPage> {
           borderRadius: BorderRadiusGeometry.circular(14),
           child: Animate(
             effects: [
-              ScaleEffect(
+              const ScaleEffect(
                 duration: Duration(milliseconds: 300),
                 begin: Offset(0, 0),
               ),
               ShimmerEffect(
                 color: ccPurple,
-                duration: Duration(milliseconds: 700),
-                delay: Duration(milliseconds: 400),
+                duration: const Duration(milliseconds: 700),
+                delay: const Duration(milliseconds: 400),
               ),
               //ColorEffect(end: Color.fromRGBO(46, 51, 159, 1), blendMode: BlendMode.color)
             ],
             child: Container(
               decoration: BoxDecoration(
-                color: Color.fromARGB(177, 0, 0, 0),
+                color: const Color.fromARGB(177, 0, 0, 0),
                 borderRadius: BorderRadius.circular(14),
                 //border: Border.all(color: ccPurple, width: 2)
               ),
               height: MediaQuery.of(context).size.height / 2.5,
               width: screenWidth / 1.5,
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(20.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children:
                           "B I N G O".characters.toList().asMap().entries.map((entry) {
                         final i = entry.key;
                         final char = entry.value;
-                        return Text(char, style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),)
+                        return Text(char, style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold),)
                             .animate(
                               delay: (i * 70).ms,
                               onPlay: (c) => c.repeat(reverse: true),
                             )
-                            .moveY(begin: 0, end: -20, duration: 500.ms);
+                            .moveY(begin: -5, end: 15, duration: 500.ms);
                       }).toList(),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(14)
+                      ),
+                      height: screenWidth / 2.5,
+                      width: screenWidth / 2.5,
+                      child: ClipRRect(
+                        borderRadius: BorderRadiusGeometry.circular(14),
+                        child: FittedBox(
+                          fit: BoxFit.cover,
+                          clipBehavior: Clip.hardEdge,
+                          child: kIsWeb ? taskTiles[imgNum].webImage != null ? Image.memory(taskTiles[imgNum].webImage!) : const Placeholder(color: Colors.transparent,)
+                                            : taskTiles[imgNum].image != null ? Image.file(taskTiles[imgNum].image!) : const Placeholder(color: Colors.transparent,),
+                        ),
+                      ),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Material(
-                          color: Colors.transparent, // Fontos!
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(14),
-                            onTap: () {
-                              Navigator.of(context).pop(false);
-                            },
-                            splashColor: ccPurple.withAlpha(0),
-                            child: Ink(
-                              height: 40,
-                              width: 80,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(14),
-                                color: const Color.fromARGB(100, 0, 0, 0),
-                                border: Border.all(color: sarga, width: 2),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'YAY!',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 17,
-                                      letterSpacing: 0.7,
-                                      color: sarga),
+                          Material(
+                            color: Colors.transparent, // Fontos!
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(14),
+                              onTap: () {
+                                Navigator.of(context).pop(false);
+                              },
+                              splashColor: ccPurple.withAlpha(0),
+                              child: Ink(
+                                height: 40,
+                                width: 80,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(14),
+                                  color: const Color.fromARGB(100, 0, 0, 0),
+                                  border: Border.all(color: sarga, width: 2),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'YAY!',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 17,
+                                        letterSpacing: 0.7,
+                                        color: sarga),
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
+                        const SizedBox(width: 5,)
                       ],
                     )
                   ],
@@ -368,7 +390,9 @@ class _MainPageState extends State<MainPage> {
                     ),
                   ),
                   Expanded(
-                    child: GridView.count(crossAxisCount: size, children: [
+                    child: GridView.count(
+                      addAutomaticKeepAlives: true,
+                      crossAxisCount: size, children: [
                       for (int i = 0; i < cells.length; i++)
                         Animate(
                           delay: (i * 120).ms,
@@ -472,34 +496,3 @@ class _MainPageState extends State<MainPage> {
     );
   }
 }
-/*
-Material(
-                color: Colors.transparent, // Fontos!
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(14),
-                  onTap: restart,
-                  splashColor: const Color.fromRGBO(255, 109, 51, 0.5),
-                  child: Ink(
-                    height: 50,
-                    width: 140,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(14),
-                      color: const Color.fromRGBO(255, 255, 255, 0.2),
-                      border: Border.all(
-                          color: const Color.fromARGB(255, 255, 255, 255),
-                          width: 2),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'RESTART',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 17,
-                            letterSpacing: 0.7,
-                            color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-*/
