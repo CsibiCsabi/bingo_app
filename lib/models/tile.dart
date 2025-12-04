@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:camera/camera.dart';
@@ -60,36 +61,93 @@ class _TileState extends State<Tile> {
     _cameras = await availableCameras();
     webController = CameraController(_cameras[0], ResolutionPreset.max);
 
+    
+
     try {
       await webController!.initialize();
       if (!mounted) return;
 
       // Show live preview in a dialog
       await showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          content: AspectRatio(
-            aspectRatio: webController!.value.aspectRatio,
-            child: CameraPreview(webController!),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () async {
-                // Capture image
-                final picture = await webController!.takePicture();
-                webImage = await picture.readAsBytes();
+          context: context,
+          builder: (context) => Animate(
+                // effects: [FadeEffect(), ScaleEffect()],
+                child: AlertDialog(
+                  backgroundColor: Colors.black.withValues(alpha: 0.95),
+                  contentPadding: const EdgeInsets.fromLTRB(
+                      16, 16, 16, 16), // left, top, right, bottom
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadiusGeometry.circular(24),
+                    side: const BorderSide(color: Colors.white, width: 3),
+                  ),
+                  content: Center(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: AspectRatio(
+                        aspectRatio: webController!.value.aspectRatio,
+                        child: CameraPreview(webController!),
+                      ),
+                    ),
+                  ),
+                  actions: [
+                    Center(
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black26,
+                                blurRadius: 6,
+                                offset: Offset(0, 3)),
+                          ],
+                        ),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                          borderRadius: BorderRadius.circular(14),
+                          onTap: () async {
+                            // Capture image
+                            final picture = await webController!.takePicture();
+                            webImage = await picture.readAsBytes();
 
-                setState(() {
-                  widget.imageTaken = true;
-                });
+                            setState(() {
+                              widget.imageTaken = true;
+                            });
 
-                Navigator.pop(context); // Close dialog
-              },
-              child: const Text("Capture"),
-            ),
-          ],
-        ),
-      );
+                           await Future.delayed(200.ms);
+
+                            Navigator.pop(context); // Close dialog
+                          },
+                          child: Ink(
+                          height: 60, // button height
+                          width: 60,  // button width
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14), // button corners
+                            color: const Color.fromRGBO(255, 255, 255, 0.2), // semi-transparent background
+                            border: Border.all(color: Colors.white, width: 2), // white border
+                          ), // End BoxDecoration
+                          child: const Center(
+                            child: Icon(
+                              Icons.camera_alt,
+                              color: Colors.white,
+                              size: 30,
+                            ), // End Icon
+                          ), // End inner Center
+                          ),
+                        ),
+                      ),
+                    ),
+                    )
+                  ],
+                ),
+              )
+                  .animate()
+                  .slideY(
+                      begin: -1,
+                      end: 0,
+                      curve: Curves.easeOut,
+                      duration: 500.ms)
+                  .fadeIn(duration: 500.ms));
     } catch (e) {
       print("Camera error: $e");
     } finally {
