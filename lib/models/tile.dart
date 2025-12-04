@@ -51,19 +51,20 @@ class _TileState extends State<Tile> {
         widget.image = File(PickedFile.path);
         widget.imageTaken = true;
         widget.onFinish(widget.task);
-        // print("task finished: "+ widget.task);
+        //print("task finished: "+ widget.task);
       });
     }
   }
 
-  
   CameraController? webController;
 
   Future<void> webCamera() async {
     _cameras = await availableCameras();
-    final frontCamera = _cameras.firstWhere((c) => c.lensDirection == CameraLensDirection.front, orElse: () => _cameras.first);
-    webController = CameraController(frontCamera, ResolutionPreset.veryHigh, enableAudio: false);
-    
+    final frontCamera = _cameras.firstWhere(
+        (c) => c.lensDirection == CameraLensDirection.front,
+        orElse: () => _cameras.first);
+    webController = CameraController(frontCamera, ResolutionPreset.veryHigh,
+        enableAudio: false);
 
     try {
       await webController!.initialize();
@@ -113,10 +114,9 @@ class _TileState extends State<Tile> {
 
                               setState(() {
                                 widget.imageTaken = true;
-                                widget.onFinish(widget.task);
-
+                                // widget.onFinish(widget.task);
                               });
-                              Navigator.pop(context);
+                              if (context.mounted) Navigator.of(context).pop();
                             },
                             child: Ink(
                               height: 60,
@@ -138,7 +138,6 @@ class _TileState extends State<Tile> {
                           ),
                         ),
                       ),
-                      
                     ),
                   ],
                 ),
@@ -151,13 +150,15 @@ class _TileState extends State<Tile> {
                       duration: 300.ms)
                   .fadeIn(duration: 300.ms));
     } catch (e) {
-      print("Camera error: $e");
-    } finally {
-      await webController?.dispose();
-      webController = null;
+      // print("Camera error: $e");
     }
+    await Future.delayed(200.ms);
+    await webController?.dispose();
+    webController = null;
+
+    widget.onFinish(widget.task);
   }
-  
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -294,7 +295,7 @@ class _TileState extends State<Tile> {
                   ),
                 ),
                 */
-        ),
+            ),
       ),
     );
   }
