@@ -72,15 +72,15 @@ class _MainPageState extends State<MainPage> {
 
   void finishTask(task) {
     taskList[tasks.indexOf(task)] = true;
-    for (bool i in taskList) {
-      if (!i) {
-        print("not all tasks finisshed!");
+    for (Tile i in tasks){
+      if (!i.imageTaken){
+        print("not all tasks are finished");
         return;
       }
     }
     print("all tasks are finsihed");
     showBingo();
-  }
+    }
 
   List<Tile> taskTiles = [];
 

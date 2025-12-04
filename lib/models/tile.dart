@@ -154,6 +154,12 @@ class _TileState extends State<Tile> {
       await webController?.dispose();
       webController = null;
     }
+    if (PickedFile != null) {
+      setState(() {
+        widget.imageTaken = true;
+        widget.onFinish(widget.task);
+      });
+    }
   }
   
   @override
