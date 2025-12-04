@@ -290,7 +290,7 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     getCells();
-    Future.delayed(const Duration(milliseconds: 2000), () {
+    Future.delayed(const Duration(milliseconds: 1500), () {
       setState(() {
         isGrey = false;
       });
@@ -338,7 +338,7 @@ class _MainPageState extends State<MainPage> {
             ShimmerEffect(
               color: Color.fromARGB(255, 167, 193, 206),
               duration: Duration(milliseconds: 2000),
-              delay: Duration(milliseconds: 4000),
+              delay: Duration(milliseconds: 2250),
               size: 2,
             )
           ],
@@ -356,7 +356,7 @@ class _MainPageState extends State<MainPage> {
                 ShimmerEffect(
                   color: Color.fromARGB(255, 167, 193, 206),
                   duration: Duration(milliseconds: 2000),
-                  delay: Duration(milliseconds: 2500),
+                  delay: Duration(milliseconds: 750),
                   size: 2,
                 )
               ],
